@@ -1,10 +1,16 @@
+FFMPEG_TARGET_LIBS="libavutil libavcodec libavformat libswscale libavfilter"
+
+ffmpeg_check_exist() {
+	check_exist $FFMPEG_TARGET_LIBS
+}
+
 ffmpeg_dependencies() {
 	eval $1="'$FF_LIBS'"
 }
 
 ffmpeg_fetch() {
-	#do_git_checkout https://github.com/FFmpeg/FFmpeg.git $1
-	download_and_extract http://ffmpeg.org/releases/ffmpeg-3.1.2.tar.bz2 $1
+	do_git_checkout "--depth 1 https://github.com/FFmpeg/FFmpeg.git" $1
+	#download_and_extract http://ffmpeg.org/releases/ffmpeg-3.1.2.tar.bz2 $1
 }
 
 ffmpeg_clean() {
@@ -21,17 +27,13 @@ ffmpeg_set_params() {
 	add_prefix params "--arch=$ARCH \
 		--pkg-config=pkg-config \
 		--pkg-config-flags=--static \
-		--disable-ffprobe \
-		--disable-ffserver \
 		--disable-debug \
 		--disable-doc \
 		--disable-static \
 		--enable-shared \
 		--enable-gpl \
-		--enable-version3 \
 		--enable-postproc \
 		--enable-runtime-cpudetect \
-		--enable-memalign-hack \
 		--enable-pic \
 		$options \
 		$FF_ENABLED_LIBS"
