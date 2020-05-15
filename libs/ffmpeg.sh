@@ -17,6 +17,27 @@ ffmpeg_clean() {
 	make distclean
 }
 
+# ./configure
+#     --arch=x86_64                       # architecture
+#     --pkg-config=pkg-config             # pkg-config excutable file
+#     --pkg-config-flags=--static         # link external libs to a static binary while compilation
+#     --disable-debug                     # disable debug
+#     --disable-doc                       # disable doc
+#     --disable-static                    # donot create static libraries (libav*.a)
+#     --enable-shared                     # create shared libraries (libav*.so)
+#     --enable-gpl                        # enable the code within GPL lisence
+#     --enable-postproc                   # enable post process lib
+#     --enable-runtime-cpudetect          # detect cpu in runtime
+#     --enable-pic                        # enable position independent compilation
+#     --target-os=mingw32                 # target os
+#     --cross-prefix=                     # cross compilation
+#     --enable-dxva2                      # Direct-X Video Acceleration API, developed by Microsoft
+#     --enable-libvpx                     # enable external encoding library vp8, vp9
+#     --enable-libx264                    # enable external encoding library x264
+#     --enable-libx265                    # enable external encoding library x265
+#     --prefix=/d/Work/msys_install_dir   # make install prefix, the dir where bin, lib and include exists
+#     --disable-w32threads                # disable win32 threading API
+#     --enable-pthreads                   # using mingw threading API (POISX)
 ffmpeg_set_params() {
 	local __resultvar=$1
 	local options=$2
@@ -49,6 +70,7 @@ ffmpeg_configure_darwin() {
 	ffmpeg_set_params config "--target-os=darwin"
 	ffmpeg_set_pthreads config "$config"
 
+	do_notify "./configure $config"
 	./configure $config
 }
 
@@ -56,6 +78,7 @@ ffmpeg_configure_linux32() {
 	ffmpeg_set_params config "--target-os=linux --enable-cross-compile --extra-ldflags=-ldl"
 	ffmpeg_set_pthreads config "$config"
 
+	do_notify "./configure $config"
 	./configure $config
 }
 
@@ -63,6 +86,7 @@ ffmpeg_configure_linux64() {
 	ffmpeg_set_params config "--target-os=linux"
 	ffmpeg_set_pthreads config "$config"
 
+	do_notify "./configure $config"
 	./configure $config
 }
 
@@ -70,12 +94,14 @@ ffmpeg_configure_mingw() {
 	ffmpeg_set_params config "--target-os=mingw32 --cross-prefix=$TOOL_CHAIN_PREFIX --enable-dxva2"
 	ffmpeg_set_pthreads config "$config"
 
+	do_notify "./configure $config"
 	LDFLAGS="$LDFLAGS -static -static-libgcc -static-libstdc++" ./configure $config
 }
 
 ffmpeg_configure_win() {
 	ffmpeg_set_params config "--toolchain=$TOOLCHAIN --extra-cflags=$CPPFLAGS --extra-ldflags=$LDFLAGS"
 
+	do_notify "./configure $config"
 	./configure $config
 }
 

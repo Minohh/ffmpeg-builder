@@ -284,7 +284,7 @@ install_library() {
     
     # Critical functions will exit on error.
     do_notify "Checking exist $name ..."
-    execute_function $name "$name"_check_exist    && return 0
+    execute_function $name "$name"_check_exist    && execute_function $name "$name"_enable && return 0
     
     do_notify "Fetching $name ..."
     execute_function $name "$name"_fetch $name    || error "Fetching $name failed!"
@@ -293,14 +293,15 @@ install_library() {
     execute_function $name "$name"_clean
 
     do_notify "Configuring $name ..."
-    execute_function $name "$name"_configure    || error "Configuring $name failed!"
+    execute_function $name "$name"_configure      || error "Configuring $name failed!"
 
     do_notify "Making $name ..."
-    execute_function $name "$name"_make            || error "Making $name failed!"
+    execute_function $name "$name"_make           || error "Making $name failed!"
 
     do_notify "Installing $name ..."
     execute_function $name "$name"_install        || error "Installing $name failed!"
 
+    do_notify "Enable $name for FFmpeg"
     execute_function $name "$name"_enable
 }
 
@@ -422,16 +423,16 @@ while [ "$1" != "" ]; do
         -p | --profile )    shift
                             FF_PROFILE=$1
                             ;;
-        -i | --prefix )        shift
+        -i | --prefix )     shift
                             FF_PREFIX=$1
                             ;;
-        -l | --libs )        shift
+        -l | --libs )       shift
                             FF_LIBS=$1
                             ;;
-        -h | --help )        usage
-                             exit
+        -h | --help )       usage
+                            exit
                             ;;
-        * )                    usage
+        * )                 usage
                             exit 1
     esac
     shift

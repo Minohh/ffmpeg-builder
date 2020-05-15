@@ -18,7 +18,7 @@ x265_clean() {
 }
 
 x265_set_params() {
-    eval $1='"-DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_IMPLICIT_LINK_LIBRARIES=stdc++"'
+    eval $1='"-DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_IMPLICIT_LINK_LIBRARIES=stdc++ -DHIGH_BIT_DEPTH=ON -DENABLE_HDR10_PLUS=ON"'
 }
 
 x265_configure_darwin() {
