@@ -55,7 +55,7 @@ x265_configure_win64() {
 }
 
 x265_make() {
-    exec_in_dir "build" make
+    exec_in_dir "build" make -j16
 }
 
 x265_make_win() {
@@ -64,6 +64,7 @@ x265_make_win() {
 
 x265_install() {
     exec_in_dir "build" make install
+    sed -i '/^Libs.private/ s/$/ -lpthread/' $PKG_CONFIG_PATH/x265.pc
 }
 
 x265_install_win() {

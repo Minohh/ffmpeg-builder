@@ -106,7 +106,7 @@ ffmpeg_configure_win() {
 }
 
 ffmpeg_make() {
-	make
+	make -j16
 }
 
 ffmpeg_install() {
