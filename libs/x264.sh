@@ -41,7 +41,7 @@ x264_configure_win() {
 }
 
 x264_make() {
-    make
+    make -j16
 }
 
 x264_install() {
